@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7z020clg484-1" LaunchTime="1772354029">
+<GenRun Id="synth_1" LaunchPart="xc7z020clg484-1" LaunchTime="1772799344">
   <File Type="PA-TCL" Name="ALU.tcl"/>
   <File Type="RDS-PROPCONSTRS" Name="ALU_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="ALU_reports.tcl"/>
@@ -13,6 +13,13 @@
     <Filter Type="Srcs"/>
     <File Path="$PSRCDIR/sources_1/new/Ass1.vhd">
       <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/Ass2.vhd">
+      <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>

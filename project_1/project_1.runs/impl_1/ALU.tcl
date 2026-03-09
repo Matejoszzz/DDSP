@@ -69,11 +69,11 @@ set rc [catch {
   create_project -in_memory -part xc7z020clg484-1
   set_property design_mode GateLvl [current_fileset]
   set_param project.singleFileAddWarning.threshold 0
-  set_property webtalk.parent_dir C:/Users/marti/Documents/DDSP/project_1/project_1.cache/wt [current_project]
-  set_property parent.project_path C:/Users/marti/Documents/DDSP/project_1/project_1.xpr [current_project]
-  set_property ip_output_repo C:/Users/marti/Documents/DDSP/project_1/project_1.cache/ip [current_project]
+  set_property webtalk.parent_dir C:/Users/marti/Documents/GitHub/DDSP/project_1/project_1.cache/wt [current_project]
+  set_property parent.project_path C:/Users/marti/Documents/GitHub/DDSP/project_1/project_1.xpr [current_project]
+  set_property ip_output_repo C:/Users/marti/Documents/GitHub/DDSP/project_1/project_1.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
-  add_files -quiet C:/Users/marti/Documents/DDSP/project_1/project_1.runs/synth_1/ALU.dcp
+  add_files -quiet C:/Users/marti/Documents/GitHub/DDSP/project_1/project_1.runs/synth_1/ALU.dcp
   link_design -top ALU -part xc7z020clg484-1
   close_msg_db -file init_design.pb
 } RESULT]
