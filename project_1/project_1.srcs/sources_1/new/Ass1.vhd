@@ -16,8 +16,8 @@ begin
     C <= ((A and B)
     or (B and C(7 downto 0)) 
     or (A and C(7 downto 0))) 
-    & CarryIn after 3ns;
-    D <= (A xor B) xor C(7 downto 0) after 5ns;
+    & CarryIn;
+    D <= (A xor B) xor C(7 downto 0);
     CarryOut <= C(8);
 end Behavioral;
 

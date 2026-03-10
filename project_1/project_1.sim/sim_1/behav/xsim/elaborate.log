@@ -1,6 +1,6 @@
 Vivado Simulator 2019.1
 Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
-Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 59b2589b5f6943eeaa876730729bf15b --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot tb_FlipFlop_behav xil_defaultlib.tb_FlipFlop -log elaborate.log 
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 59b2589b5f6943eeaa876730729bf15b --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot tb_ALU_behav xil_defaultlib.tb_ALU -log elaborate.log 
 Using 2 slave threads.
 Starting static elaboration
 Completed static elaboration
@@ -10,7 +10,8 @@ Time Resolution for simulation is 1ps
 Compiling package std.standard
 Compiling package std.textio
 Compiling package ieee.std_logic_1164
-Compiling package ieee.numeric_std
-Compiling architecture behavioral of entity xil_defaultlib.FlipFlop [flipflop_default]
-Compiling architecture behavioral of entity xil_defaultlib.tb_flipflop
-Built simulation snapshot tb_FlipFlop_behav
+Compiling architecture behavioral of entity xil_defaultlib.Adder [adder_default]
+Compiling architecture behavioral of entity xil_defaultlib.Multiplexer [multiplexer_default]
+Compiling architecture structural of entity xil_defaultlib.ALU [alu_default]
+Compiling architecture behavioral of entity xil_defaultlib.tb_alu
+Built simulation snapshot tb_ALU_behav
