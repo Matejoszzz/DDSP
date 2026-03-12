@@ -1,0 +1,25 @@
+﻿# --- Vivado Temporary Files ---
+*.log
+*.jou
+*.str
+*.backup.jou
+*.backup.log
+
+# --- Project Folders (Specific to project) ---
+/project.hw/
+/project.ip_user_files/
+/project.runs/
+/project.sim/
+/project.gen/
+/project.cache/
+
+# --- Local & Hidden Folders ---
+/project.srcs/utils_1/
+.Xil/
+Vivado_init.tcl
+
+# --- OS/Editor Specific ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
