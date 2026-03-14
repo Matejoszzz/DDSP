@@ -2,8 +2,6 @@
 2019.1
 May 24 2019
 15:06:07
-C:/Users/marti/Documents/GitHub/DDSP/project_1/project_1.srcs/sim_1/new/tbALU.vhd,1771762328,vhdl,,,,tb_alu,,,,,,,,
-C:/Users/marti/Documents/GitHub/DDSP/project_1/project_1.srcs/sim_1/new/tb_FlipFlop.vhd,1772799329,vhdl,,,,tb_flipflop,,,,,,,,
-C:/Users/marti/Documents/GitHub/DDSP/project_1/project_1.srcs/sim_1/new/tb_ass1.vhd,1772354020,vhdl,,,,tb_ass1,,,,,,,,
-C:/Users/marti/Documents/GitHub/DDSP/project_1/project_1.srcs/sources_1/new/Ass1.vhd,1773137050,vhdl,,,,adder;alu;multiplexer,,,,,,,,
-C:/Users/marti/Documents/GitHub/DDSP/project_1/project_1.srcs/sources_1/new/Ass2.vhd,1772799250,vhdl,,,,flipflop,,,,,,,,
+C:/Users/emily/Desktop/DDSP_git/DDSP/project_1/project_1.srcs/sim_1/new/tb_CPU.vhd,1773474187,vhdl,,,,tb_cpu,,,,,,,,
+C:/Users/emily/Desktop/DDSP_git/DDSP/project_1/project_1.srcs/sources_1/new/Ass1.vhd,1773306078,vhdl,,,,adder;alu;multiplexer,,,,,,,,
+C:/Users/emily/Desktop/DDSP_git/DDSP/project_1/project_1.srcs/sources_1/new/Ass2.vhd,1773470507,vhdl,,,,cpu;flipflop;reg,,,,,,,,

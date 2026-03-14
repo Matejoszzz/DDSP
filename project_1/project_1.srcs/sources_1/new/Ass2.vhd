@@ -107,8 +107,8 @@ extra3 <= (instructions(5) and not instructions(4))and clk;
 InputMux_block: Multiplexer port map (
         In1 => input1, 
         In2 => input2,
-        In3 => "00",
-        In4 => "00",
+        In3 => "00000000",
+        In4 => "00000000",
         Selector => instructions (7 downto 6),
         someOutput => mux1out
 );
