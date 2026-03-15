@@ -37,7 +37,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity reg is
     Port ( input : in STD_LOGIC_VECTOR (7 downto 0);
        output    : out STD_LOGIC_VECTOR (7 downto 0);
-       decoder   : in STD_LOGIC
+       clk, decoder   : in STD_LOGIC
     );
 end reg;
 
@@ -46,11 +46,12 @@ end reg;
 architecture Behavioral of reg is
 
 begin
-    process(decoder)
+    process(clk)
 begin
-    if rising_edge(decoder) then 
+    if rising_edge(clk) then 
+        if decoder = '1' then
         output <= input; 
-        
+        end if;
     end if;
 end process;
 end Behavioral;
@@ -62,9 +63,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity CPU is
     Port ( input1, input2         : in STD_LOGIC_VECTOR (7 downto 0);
-       CPU_output1, CPU_output2   : out STD_LOGIC_VECTOR (7 downto 0);
+       CPU_output1   : out STD_LOGIC_VECTOR (7 downto 0);
        clk                        : in STD_LOGIC;
-       instructions               : in STD_LOGIC_VECTOR (7 downto 0)
+       instructions               : in STD_LOGIC_VECTOR (10 downto 0)
     );
 end CPU;
 
@@ -94,9 +95,9 @@ component ALU is
     );
 end component;
     component reg
-     Port ( input : in STD_LOGIC_VECTOR (7 downto 0);
-       output     : out STD_LOGIC_VECTOR (7 downto 0);
-       decoder    : in STD_LOGIC
+     Port ( input      : in STD_LOGIC_VECTOR (7 downto 0);
+       output          : out STD_LOGIC_VECTOR (7 downto 0);
+       decoder, clk    : in STD_LOGIC
     );
     end component;
     
@@ -121,11 +122,14 @@ end component;
     signal ALU_mux2_out : STD_LOGIC_VECTOR(7 downto 0);
     signal ALUoutput    : STD_LOGIC_VECTOR(7 downto 0);
     signal Carryout     : STD_LOGIC;
+    
+    --signal output1 : STD_LOGIC_VECTOR(7 downto 0);
+    --signal output2 : STD_LOGIC_VECTOR(7 downto 0);
 begin
-extra4 <= (instructions(5) and instructions(4))and clk;
-extra1 <= (not instructions(5) and not instructions(4))and clk;
-extra2 <= (not instructions(5) and instructions(4))and clk;
-extra3 <= (instructions(5) and not instructions(4))and clk;
+extra4 <= (instructions(5) and instructions(4));
+extra1 <= (not instructions(5) and not instructions(4));
+extra2 <= (not instructions(5) and instructions(4));
+extra3 <= (instructions(5) and not instructions(4));
 
 
 InputMux_block: Multiplexer port map (
@@ -158,29 +162,33 @@ ALU_Mux2: Multiplexer port map (
 RegisterA: reg port map (
         input   => mux1out,
         output  => aout,
-        decoder => extra1
+        decoder => extra1,
+        clk     => clk
 );
 RegisterB: reg port map (
         input   => mux1out,
         output  => bout,
-        decoder => extra2
+        decoder => extra2,
+        clk     => clk
 );
 RegisterC: reg port map (
         input   => mux1out,
         output  => cout,
-        decoder => extra3
+        decoder => extra3,
+        clk     => clk
 );
 RegisterD: reg port map (
         input   => mux1out,
         output  => dout,
-        decoder => extra4
+        decoder => extra4,
+        clk     => clk
 );
 ALU_block: ALU port map (
-number1  => ALU_mux1_out, --just signals from 2ns 3rd mux to ALU
+number1  => ALU_mux1_out, --just signals from 2nd 3rd mux to ALU
 number2  => ALU_mux2_out,
-Cin      => '0',
-Operator => "0",
-result   => ALUoutput,--should be fed back into mux1
+Cin      => instructions(10),
+Operator => instructions (9 downto 8),
+result   => CPU_output1,--should be fed back into mux1
 Cout     => Carryout --cout would be still be passed as output
 );
 
