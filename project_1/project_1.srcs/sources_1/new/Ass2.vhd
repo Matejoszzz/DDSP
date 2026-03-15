@@ -1,11 +1,12 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+--***************************************************************flipflop component
 entity FlipFlop is
     Port ( clk : in STD_LOGIC;
-       dataIn : in STD_LOGIC;
-       reset : in STD_LOGIC;
-       preset : in STD_LOGIC;
+       dataIn  : in STD_LOGIC;
+       reset   : in STD_LOGIC;
+       preset  : in STD_LOGIC;
        dataOut : out STD_LOGIC
     );
 end FlipFlop;
@@ -32,11 +33,11 @@ end Behavioral;
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
+--***************************************************************reg component
 entity reg is
     Port ( input : in STD_LOGIC_VECTOR (7 downto 0);
-       output : out STD_LOGIC_VECTOR (7 downto 0);
-       decoder : in STD_LOGIC
+       output    : out STD_LOGIC_VECTOR (7 downto 0);
+       decoder   : in STD_LOGIC
     );
 end reg;
 
@@ -53,15 +54,17 @@ begin
     end if;
 end process;
 end Behavioral;
+--***************************************************************ALU component
 
+--***************************************************************CPU component
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity CPU is
-    Port ( input1, input2 : in STD_LOGIC_VECTOR (7 downto 0);
-       aout, bout, cout, dout : out STD_LOGIC_VECTOR (7 downto 0);
-       clk : in STD_LOGIC;
-       instructions : in STD_LOGIC_VECTOR (7 downto 0)
+    Port ( input1, input2         : in STD_LOGIC_VECTOR (7 downto 0);
+       CPU_output1, CPU_output2   : out STD_LOGIC_VECTOR (7 downto 0);
+       clk                        : in STD_LOGIC;
+       instructions               : in STD_LOGIC_VECTOR (7 downto 0)
     );
 end CPU;
 
@@ -71,18 +74,29 @@ architecture Structural of CPU is
     
     component Multiplexer
         Port (
-        Selector : in STD_LOGIC_VECTOR (1 downto 0);
-        In1 : in STD_LOGIC_VECTOR (7 downto 0);
-        In2 : in STD_LOGIC_VECTOR (7 downto 0);
-        In3 : in STD_LOGIC_VECTOR (7 downto 0);
-        In4 : in STD_LOGIC_VECTOR (7 downto 0);
+        Selector   : in STD_LOGIC_VECTOR (1 downto 0);
+        In1        : in STD_LOGIC_VECTOR (7 downto 0);
+        In2        : in STD_LOGIC_VECTOR (7 downto 0);
+        In3        : in STD_LOGIC_VECTOR (7 downto 0);
+        In4        : in STD_LOGIC_VECTOR (7 downto 0);
         SomeOutput : out STD_LOGIC_VECTOR (7 downto 0)
     );
     end component;
+    
+component ALU is
+    Port ( 
+        number1      : in STD_LOGIC_VECTOR (7 downto 0);
+        number2      : in STD_LOGIC_VECTOR (7 downto 0);
+        Cin          : in STD_LOGIC;
+        Operator     : in STD_LOGIC_VECTOR (1 downto 0);
+        result       : out STD_LOGIC_VECTOR (7 downto 0);
+        Cout         : out STD_LOGIC --carry out bit
+    );
+end component;
     component reg
      Port ( input : in STD_LOGIC_VECTOR (7 downto 0);
-       output : out STD_LOGIC_VECTOR (7 downto 0);
-       decoder : in STD_LOGIC
+       output     : out STD_LOGIC_VECTOR (7 downto 0);
+       decoder    : in STD_LOGIC
     );
     end component;
     
@@ -97,6 +111,16 @@ architecture Structural of CPU is
     signal extra2 : STD_LOGIC;
     signal extra3 : STD_LOGIC;
     signal extra4 : STD_LOGIC;
+    
+    signal aout : STD_LOGIC_VECTOR(7 downto 0);
+    signal bout : STD_LOGIC_VECTOR(7 downto 0);
+    signal cout : STD_LOGIC_VECTOR(7 downto 0);
+    signal dout : STD_LOGIC_VECTOR(7 downto 0);
+    
+    signal ALU_mux1_out : STD_LOGIC_VECTOR(7 downto 0);
+    signal ALU_mux2_out : STD_LOGIC_VECTOR(7 downto 0);
+    signal ALUoutput    : STD_LOGIC_VECTOR(7 downto 0);
+    signal Carryout     : STD_LOGIC;
 begin
 extra4 <= (instructions(5) and instructions(4))and clk;
 extra1 <= (not instructions(5) and not instructions(4))and clk;
@@ -105,33 +129,59 @@ extra3 <= (instructions(5) and not instructions(4))and clk;
 
 
 InputMux_block: Multiplexer port map (
-        In1 => input1, 
-        In2 => input2,
-        In3 => "00000000",
-        In4 => "00000000",
-        Selector => instructions (7 downto 6),
+        In1        => input1, 
+        In2        => input2,
+        In3        => "00000000",
+        In4        => "00000000",
+        Selector   => instructions (7 downto 6),
         someOutput => mux1out
 );
 
+ALU_Mux1: Multiplexer port map (
+        In1        => aout, 
+        In2        => bout,
+        In3        => cout,
+        In4        => dout,
+        Selector   => instructions (3 downto 2),
+        someOutput => ALU_mux1_out
+);
+
+ALU_Mux2: Multiplexer port map (
+        In1        => aout, 
+        In2        => bout,
+        In3        => cout,
+        In4        => dout,
+        Selector   => instructions (1 downto 0),
+        someOutput => ALU_mux2_out
+);
+
 RegisterA: reg port map (
-        input => mux1out,
-        output => aout,
+        input   => mux1out,
+        output  => aout,
         decoder => extra1
 );
 RegisterB: reg port map (
-        input => mux1out,
-        output => bout,
+        input   => mux1out,
+        output  => bout,
         decoder => extra2
 );
 RegisterC: reg port map (
-        input => mux1out,
-        output => cout,
+        input   => mux1out,
+        output  => cout,
         decoder => extra3
 );
 RegisterD: reg port map (
-        input => mux1out,
-        output => dout,
+        input   => mux1out,
+        output  => dout,
         decoder => extra4
+);
+ALU_block: ALU port map (
+number1  => ALU_mux1_out, --just signals from 2ns 3rd mux to ALU
+number2  => ALU_mux2_out,
+Cin      => '0',
+Operator => "0",
+result   => ALUoutput,--should be fed back into mux1
+Cout     => Carryout --cout would be still be passed as output
 );
 
   

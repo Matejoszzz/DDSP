@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GenRun Id="impl_1" LaunchPart="xc7z020clg484-1" LaunchTime="1773155231">
-  <File Type="BITSTR-BMM" Name="ALU_bd.bmm"/>
   <File Type="PA-TCL" Name="ALU.tcl"/>
-  <File Type="OPT-DCP" Name="ALU_opt.dcp"/>
+  <File Type="BITSTR-BMM" Name="ALU_bd.bmm"/>
   <File Type="REPORTS-TCL" Name="ALU_reports.tcl"/>
+  <File Type="OPT-DCP" Name="ALU_opt.dcp"/>
   <File Type="OPT-HWDEF" Name="ALU.hwdef"/>
+  <File Type="BG-BGN" Name="ALU.bgn"/>
   <File Type="PWROPT-DCP" Name="ALU_pwropt.dcp"/>
   <File Type="PLACE-DCP" Name="ALU_placed.dcp"/>
   <File Type="PLACE-PRE-SIMILARITY" Name="ALU_incremental_reuse_pre_placed.rpt"/>
-  <File Type="BG-BGN" Name="ALU.bgn"/>
   <File Type="POSTPLACE-PWROPT-DCP" Name="ALU_postplace_pwropt.dcp"/>
   <File Type="BG-BIN" Name="ALU.bin"/>
   <File Type="PHYSOPT-DCP" Name="ALU_physopt.dcp"/>
