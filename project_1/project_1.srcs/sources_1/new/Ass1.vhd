@@ -1,14 +1,14 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity Half_Adder is
+entity Adder is
     Port ( A : in STD_LOGIC_VECTOR (7 downto 0);
            B : in STD_LOGIC_VECTOR (7 downto 0);
            CarryIn : in STD_LOGIC;
            D : out STD_LOGIC_VECTOR (7 downto 0);
            CarryOut : out STD_LOGIC
            );
-end Half_Adder;
+end Adder;
 
 architecture Behavioral of Adder is
  signal C : STD_LOGIC_VECTOR (8 downto 0);

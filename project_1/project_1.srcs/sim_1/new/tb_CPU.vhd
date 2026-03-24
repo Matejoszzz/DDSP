@@ -1,76 +1,62 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity tb_CPU is
---  Port ( );
-end tb_CPU;
+entity CPU_tb is
+end CPU_tb;
 
-architecture Behavioral of tb_CPU is
-component CPU is
-    Port ( input1, input2 : in STD_LOGIC_VECTOR (7 downto 0);
-       CPU_output1        : out STD_LOGIC_VECTOR ( 7 downto 0);
-       clk                : in STD_LOGIC;
-       instructions       : in STD_LOGIC_VECTOR (10 downto 0)
-       
-    );
-end component;
-signal tomux1 : std_logic_vector (7 downto 0);
-signal tomux2 : std_logic_vector (7 downto 0);
-signal CPU_output1 : std_logic_vector (7 downto 0);
+architecture Behavioral of CPU_tb is
+    component CPU
+        Port ( 
+            clk          : in  STD_LOGIC;
+            input1, input2 : in STD_LOGIC_VECTOR (7 downto 0);
+            instructions : in  STD_LOGIC_VECTOR (10 downto 0);
+            CPU_out_A, CPU_out_B, CPU_out_C, CPU_out_D : out STD_LOGIC_VECTOR (7 downto 0);
+            ALU_result   : out STD_LOGIC_VECTOR (7 downto 0);
+            Carry_bit    : out STD_LOGIC
+        );
+    end component;
 
-signal instructions : std_logic_vector (10 downto 0);
-signal clk: std_logic;
+    signal clk          : STD_LOGIC := '0';
+    signal input1       : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+    signal input2       : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+    signal instructions : STD_LOGIC_VECTOR(10 downto 0) := (others => '0');
+    signal outA, outB, outC, outD, alu_res : STD_LOGIC_VECTOR(7 downto 0);
+    signal carry : STD_LOGIC;
 
-constant clk_period : time := 20 ns;
+    constant clk_period : time := 10 ns;
+
 begin
-uut: CPU port map (
-input1 => tomux1,
-input2 => tomux2,
-clk => clk,
-instructions => instructions,
-CPU_output1 => CPU_output1
-);
+    uut: CPU port map (clk, input1, input2, instructions, outA, outB, outC, outD, alu_res, carry);
 
-   clk_process : process
+    clk_process : process
     begin
-        clk <= '0';
-        wait for clk_period/2;
-        clk <= '1';
-        wait for clk_period/2;
+        clk <= '0'; wait for clk_period/2;
+        clk <= '1'; wait for clk_period/2;
     end process;
-    
-  stim_proc: process
-  begin 
-  --test case 1:
-tomux1 <= x"05";
-tomux2 <= x"03";
-instructions <= "00000000000";
-wait for 100 ns;  -- several clock cycles to make sure it loads
 
--- load input2 into register B  
-instructions <= "00001010000";  -- bits 7-6="01" selects input2, bits 5-4="01" loads reg B
-wait for 100 ns;
+    stim_proc: process
+    begin		
+        -- Step 0: Clear Carry FlipFlop
+        instructions(10) <= '1'; wait for clk_period;
+        instructions(10) <= '0';
 
--- add reg A + reg B
-instructions <= "01100000001";
-wait for 500 ns;  -- hold long enough to see stable output
-wait;
---instructions <= "01100000001";
---tomux1 <= x"05";  -- 5
---tomux2 <= x"03";  -- 
+        -- OP 1: Load 50 (input1) into Reg A
+        input1 <= "00110010"; instructions(7 downto 4) <= "0000"; wait for clk_period;
 
-----tomux1 <= "00000000";
-----tomux2 <= "00000001";
---wait for 50 ns;
+        -- OP 2: Load 25 (input2) into Reg B
+        input2 <= "00011001"; instructions(7 downto 4) <= "0101"; wait for clk_period;
 
---instructions <= "10000000000";
---wait for 50 ns;
---instructions <= "01000000000";
---wait for 150 ns;
---instructions <= "10000000000";
---wait for 50 ns;
---instructions <= "00000000000";
---wait for 50 ns;
---wait;
-   end process;
+        -- OP 3: Load 10 (input1) into Reg C
+        input1 <= "00001010"; instructions(7 downto 4) <= "0010"; wait for clk_period;
+
+        -- OP 4: ADD A + B -> Reg D (50 + 25 = 75)
+        -- Source=ALU(10), Dest=D(11), Op=Add(00), Src1=A(00), Src2=B(01)
+        instructions <= "00010110001"; wait for clk_period;
+
+        -- OP 5: SUB D - C -> Reg A (75 - 10 = 65)
+        -- Source=ALU(10), Dest=A(00), Op=Sub(01), Src1=D(11), Src2=C(10)
+        instructions <= "00110001110"; wait for clk_period;
+
+        wait;
+    end process;
 end Behavioral;
